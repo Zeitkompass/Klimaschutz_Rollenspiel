@@ -37,7 +37,7 @@ export default function HomePage() {
 
       <main className="mx-auto grid max-w-6xl gap-10 px-6 pb-16 lg:grid-cols-[1.15fr_1fr] lg:items-center">
         <motion.section initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <span className="inline-block rounded-full bg-accent px-4 py-1.5 text-sm font-bold">Im Spiel: klimaneutral bis 2050</span>
+          <span className="inline-block rounded-full bg-accent px-4 py-1.5 text-sm font-bold">Deutschland muss das Klimaziel erreichen.</span>
           <h1 className="mt-5 font-display text-5xl font-extrabold leading-[0.95] md:text-7xl">
             Wer zahlt
             <br />

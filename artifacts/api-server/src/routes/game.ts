@@ -4,11 +4,11 @@ import { eq } from "drizzle-orm";
 import { db, climateRoomsTable } from "@workspace/db";
 import {
   GetGameResponse, GetRoomParams, GetRoomResponse,
-  JoinRoomBody, ControlRoomBody, PlayTurnBody,
+  JoinRoomBody, ControlRoomBody, PlayTurnBody, RemoveParticipantParams,
 } from "@workspace/api-zod";
 import { catalog } from "../lib/game/catalog";
 import {
-  GameError, control, play, publicRoom,
+  GameError, control, play, publicRoom, removeParticipant,
   type RoomState,
 } from "../lib/game/engine";
 
@@ -50,15 +50,15 @@ function identify(req: Request, room: RoomState) {
   const tokenHash = hash(token);
   if (tokenHash === room.teacherHash) return { teacher: true, playerId: null };
   const player = room.players.find((p) => p.credentialHash === tokenHash);
-  if (!player) throw new GameError(403, "Dieser Zugang gehört nicht zu diesem Raum.");
+  if (!player) throw new GameError(403, "Du bist nicht mehr in diesem Raum. Du kannst erneut mit deinem Namen beitreten.");
   return { teacher: false, playerId: player.id };
 }
 
 function roomCode(req: Request) {
-  const { code } = GetRoomParams.parse(req.params);
-  const normalized = code.toUpperCase().trim();
+  const raw = Array.isArray(req.params.code) ? req.params.code[0] : req.params.code;
+  const normalized = (raw ?? "").toUpperCase().replace(/\s/g, "");
   if (!/^[A-HJ-NP-Z2-9]{6}$/.test(normalized)) throw new GameError(400, "Der Raumcode besteht aus sechs Buchstaben oder Zahlen.");
-  return normalized;
+  return GetRoomParams.parse({ code: normalized }).code;
 }
 function ensureRoom(state: unknown): RoomState {
   if (!state) throw new GameError(404, "Dieser Raum wurde nicht gefunden. Prüfe den Raumcode.");
@@ -152,6 +152,23 @@ router.post("/rooms/:code/control", async (req, res): Promise<void> => {
     const identity = identify(req, room);
     if (!identity.teacher) throw new GameError(403, "Nur die Lehrkraft kann das Spiel steuern.");
     control(room, input);
+    await tx.update(climateRoomsTable).set({ state: room, updatedAt: new Date() })
+      .where(eq(climateRoomsTable.code, code));
+    return publicRoom(room, identity);
+  });
+  res.json(GetRoomResponse.parse(view));
+});
+
+router.delete("/rooms/:code/players/:playerId", async (req, res): Promise<void> => {
+  const code = roomCode(req);
+  const { playerId } = RemoveParticipantParams.parse({ ...req.params, code });
+  const view = await db.transaction(async (tx) => {
+    const [row] = await tx.select().from(climateRoomsTable)
+      .where(eq(climateRoomsTable.code, code)).for("update");
+    const room = ensureRoom(row?.state);
+    const identity = identify(req, room);
+    if (!identity.teacher) throw new GameError(403, "Nur die Lehrkraft kann Personen entfernen.");
+    removeParticipant(room, playerId);
     await tx.update(climateRoomsTable).set({ state: room, updatedAt: new Date() })
       .where(eq(climateRoomsTable.code, code));
     return publicRoom(room, identity);

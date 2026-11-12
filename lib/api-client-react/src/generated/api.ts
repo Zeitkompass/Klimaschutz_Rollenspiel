@@ -674,3 +674,79 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       return useMutation(getPlayTurnMutationOptions(options), queryClient);
     }
 
+export const getRemoveParticipantUrl = (code: string,
+    playerId: string,) => {
+
+
+
+
+  return `/api/rooms/${code}/players/${playerId}`
+}
+
+/**
+ * @summary Lehrkraft entfernt eine Person ausschließlich im Warteraum
+ */
+export const removeParticipant = async (code: string,
+    playerId: string, options?: Parameters<typeof customFetch>[1]): Promise<RoomView> => {
+
+  return customFetch<RoomView>(getRemoveParticipantUrl(code,playerId),
+  {
+    ...options,
+    method: 'DELETE'
+
+
+  }
+);}
+
+
+
+
+
+export const getRemoveParticipantMutationKey = () => ['removeParticipant'] as const;
+
+export const getRemoveParticipantMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeParticipant>>, TError,RemoveParticipantMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeParticipant>>, TError,RemoveParticipantMutationVariables, TContext> => {
+
+const mutationKey = getRemoveParticipantMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeParticipant>>, RemoveParticipantMutationVariables> = (props) => {
+          const {code,playerId} = props ?? {};
+
+          return  removeParticipant(code,playerId,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveParticipantMutationResult = NonNullable<Awaited<ReturnType<typeof removeParticipant>>>
+
+    export type RemoveParticipantMutationError = ErrorType<unknown>
+    export type RemoveParticipantMutationVariables = {code: string;playerId: string}
+
+    /**
+ * @summary Lehrkraft entfernt eine Person ausschließlich im Warteraum
+ */
+export const useRemoveParticipant = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeParticipant>>, TError,RemoveParticipantMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof removeParticipant>>,
+        TError,
+        RemoveParticipantMutationVariables,
+        TContext
+      > => {
+      return useMutation(getRemoveParticipantMutationOptions(options), queryClient);
+    }
+

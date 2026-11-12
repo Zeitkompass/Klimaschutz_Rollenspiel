@@ -41,7 +41,7 @@ export const catalog: GameCatalog = {
       problem: "Kohlekraftwerke stoßen viel CO₂ aus. Gleichzeitig arbeiten viele Menschen direkt oder indirekt in der Kohleindustrie.",
       measures: [
         { id: "2a", title: "Kohlekraftwerke schnell schließen.", description: "Die Kraftwerke werden in kurzer Zeit stillgelegt.", warning: "Arbeitsplätze können verloren gehen." },
-        { id: "2b", title: "Kohlekraftwerke schließen und neue Arbeitsplätze fördern.", description: "Der Staat bezahlt neue Arbeitsplätze in den betroffenen Regionen.", warning: "Sehr teuer für den Staat." },
+        { id: "2b", title: "Kohlekraftwerke schließen und neue Arbeitsplätze fördern.", description: "Der Staat unterstützt neue Betriebe und Arbeitsplätze in den betroffenen Regionen.", warning: "Sehr teuer für den Staat." },
         { id: "2c", title: "Kohlekraftwerke erst später schließen.", description: "Die Kraftwerke bleiben vorerst in Betrieb.", warning: "Das Klimaziel wird schwieriger." },
       ],
     },
@@ -78,18 +78,21 @@ const impact = (
 ): Impact => ({ delta: { climate, population, economy, treasury }, jobs, unpopular, explanations });
 
 // Deliberately simple teaching model; these are game points, not forecasts.
-// The climate effect never depends on popularity.
+// State decisions dominate; reactions can change their climate effect by ±4.
+// Every A/B choice gives 34 climate points; C gives 6/0/6/6.
+// With neutral reactions, three strong choices reach the target (102–108
+// before clamping). Two or more C choices miss it even with full support.
 export const impacts: Record<string, Impact> = {
-  "1a": impact(25, -14, -3, 15, 0, 3, ["Der CO₂-Ausstoß im Verkehr sinkt deutlich.", "Höhere Reisepreise belasten die Menschen.", "Der Staat nimmt zusätzlich Geld ein."]),
-  "1b": impact(25, 8, 3, -25, 0, 0, ["Mehr Menschen nutzen Bus und Bahn. Der CO₂-Ausstoß sinkt.", "Günstigere Fahrten entlasten die Menschen.", "Der Ausbau kostet den Staat viel Geld."]),
-  "1c": impact(3, 6, 5, 0, 0, 0, ["Der CO₂-Ausstoß sinkt kaum.", "Für Reisende und Unternehmen bleibt vieles einfach.", "Das Klimaziel rückt kaum näher."]),
-  "2a": impact(30, -20, -22, 0, 7, 3, ["Ohne Kohlekraftwerke wird viel CO₂ eingespart.", "Viele Menschen sorgen sich um ihren Arbeitsplatz.", "Arbeitsplatzverluste belasten die Wirtschaft und die Wiederwahl."]),
-  "2b": impact(30, 0, -4, -40, 1, 0, ["Der Kohleausstieg spart viel CO₂ ein.", "Neue Arbeitsplätze helfen den betroffenen Menschen.", "Die Unterstützung kostet den Staat sehr viel Geld."]),
-  "2c": impact(-5, 5, 7, 0, 0, 0, ["Die Kohlekraftwerke stoßen weiter viel CO₂ aus.", "Die Arbeitsplätze bleiben zunächst erhalten.", "Das Klimaziel wird schwieriger."]),
-  "3a": impact(30, -8, -20, 0, 5, 2, ["Die neue Technik spart viel CO₂ ein.", "Der schnelle Umbau belastet die Unternehmen.", "Einige Arbeitsplätze geraten in Gefahr."]),
-  "3b": impact(30, 4, 8, -35, 0, 0, ["Klimafreundliche Fabriken sparen viel CO₂ ein.", "Die Unterstützung hilft Unternehmen und Arbeitsplätzen.", "Der Staat gibt sehr viel Geld für den Umbau aus."]),
-  "3c": impact(7, 0, 6, 0, 0, 0, ["Der CO₂-Ausstoß sinkt nur langsam.", "Die Unternehmen haben mehr Zeit und weniger Kosten.", "Das Klimaziel bleibt schwer erreichbar."]),
-  "4a": impact(25, -20, 4, 0, 0, 4, ["Neue Heizungen sparen viel CO₂ ein.", "Die hohen Kosten belasten viele Haushalte.", "Der Heizungsbau bekommt neue Aufträge."]),
-  "4b": impact(25, 8, 4, -30, 0, 0, ["Neue Heizungen sparen viel CO₂ ein.", "Die finanzielle Hilfe entlastet die Haushalte.", "Die Förderung kostet den Staat sehr viel Geld."]),
+  "1a": impact(34, -14, -3, 15, 0, 3, ["Der CO₂-Ausstoß im Verkehr sinkt deutlich.", "Höhere Reisepreise belasten die Menschen.", "Der Staat nimmt zusätzlich Geld ein."]),
+  "1b": impact(34, 8, 3, -25, 0, 0, ["Mehr Menschen nutzen Bus und Bahn. Der CO₂-Ausstoß sinkt.", "Günstigere Fahrten entlasten die Menschen.", "Der Ausbau kostet den Staat viel Geld."]),
+  "1c": impact(6, 6, 5, 0, 0, 0, ["Der CO₂-Ausstoß sinkt kaum.", "Für Reisende und Unternehmen bleibt vieles einfach.", "Das Klimaziel rückt kaum näher."]),
+  "2a": impact(34, -20, -22, 0, 7, 3, ["Ohne Kohlekraftwerke wird viel CO₂ eingespart.", "Viele Menschen sorgen sich um ihren Arbeitsplatz.", "Arbeitsplatzverluste belasten die Wirtschaft und die Wiederwahl."]),
+  "2b": impact(34, 0, -4, -40, 1, 0, ["Der Kohleausstieg spart viel CO₂ ein.", "Neue Arbeitsplätze helfen den betroffenen Menschen.", "Die Unterstützung kostet den Staat sehr viel Geld."]),
+  "2c": impact(0, 5, 7, 0, 0, 0, ["Die Kohlekraftwerke stoßen weiter viel CO₂ aus.", "Die Arbeitsplätze bleiben zunächst erhalten.", "Das Klimaziel wird schwieriger."]),
+  "3a": impact(34, -8, -20, 0, 5, 2, ["Die neue Technik spart viel CO₂ ein.", "Der schnelle Umbau belastet die Unternehmen.", "Einige Arbeitsplätze geraten in Gefahr."]),
+  "3b": impact(34, 4, 8, -35, 0, 0, ["Klimafreundliche Fabriken sparen viel CO₂ ein.", "Die Unterstützung hilft Unternehmen und Arbeitsplätzen.", "Der Staat gibt sehr viel Geld für den Umbau aus."]),
+  "3c": impact(6, 0, 6, 0, 0, 0, ["Der CO₂-Ausstoß sinkt nur langsam.", "Die Unternehmen haben mehr Zeit und weniger Kosten.", "Das Klimaziel bleibt schwer erreichbar."]),
+  "4a": impact(34, -20, 4, 0, 0, 4, ["Neue Heizungen sparen viel CO₂ ein.", "Die hohen Kosten belasten viele Haushalte.", "Der Heizungsbau bekommt neue Aufträge."]),
+  "4b": impact(34, 8, 4, -30, 0, 0, ["Neue Heizungen sparen viel CO₂ ein.", "Die finanzielle Hilfe entlastet die Haushalte.", "Die Förderung kostet den Staat sehr viel Geld."]),
   "4c": impact(6, 5, 0, 0, 0, 0, ["Nur wenige Heizungen werden ausgetauscht.", "Die Menschen müssen nicht sofort viel Geld ausgeben.", "Das Klimaziel wird schwieriger."]),
 };

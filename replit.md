@@ -9,6 +9,8 @@ Eine deutschsprachige Live-Web-App für den Sozialwissenschaftsunterricht in Kla
 - `pnpm run typecheck` — TypeScript-Prüfung
 - `pnpm --filter @workspace/api-spec run codegen` — API-Clients und Validierung generieren
 - `pnpm --filter @workspace/db run push` — Entwicklungsschema aktualisieren
+- `pnpm --filter @workspace/scripts exec tsx --test ../artifacts/api-server/src/lib/game/engine.test.ts` — Spielregeln und vollständige Balanceprüfung
+- `node scripts/tests/climate-api.mjs` — HTTP-Integrationstest mit eigenen Testzugängen; benötigt laufenden API-Workflow
 - Dienste über ihre verwalteten Workflows starten; diese setzen `PORT` und `BASE_PATH`.
 
 ## Structure
@@ -31,13 +33,17 @@ Eine deutschsprachige Live-Web-App für den Sozialwissenschaftsunterricht in Kla
 - Bei Rollenwechsel verschiedene Perspektiven möglichst fair verteilen. Barometer und Entscheidungen vollständig zurücksetzen; keine erneute Regelerklärung, sondern kurze neue Rollenanzeige und erneut Runde 1.
 - Im Lehrer-Master ist „Durchgang 1“, „Durchgang 2“ usw. sichtbar.
 - Keine numerischen Auswirkungen vor einer Entscheidung zeigen.
+- Die Lehrkraft darf einzelne Personen nur im Warteraum entfernen. Danach ist erneuter Beitritt mit einem Namen möglich; nach Gruppenbildung wird Entfernen serverseitig abgelehnt.
+- Raumcodes bestehen aus genau sechs gültigen Zeichen. Großschreibung und Entfernen von Leerzeichen gelten in beiden Ansichten.
+- Die Klimawirkung hängt vor allem von der staatlichen Maßnahme ab; Unterstützung oder Ablehnung durch Bürger und Unternehmen verändert sie insgesamt höchstens um vier Punkte pro Runde.
+- Es muss mehrere erfolgreiche Klimastrategien geben: Eine einzelne Kompromissentscheidung darf das Ziel nicht unerreichbar machen, mehrere schwächste Entscheidungen sollen es normalerweise verfehlen.
 - Die Staatskasse startet bei 100. Eine leere Staatskasse beendet das Spiel nicht, weitere Ausgaben müssen aber negative Folgen haben.
 - Wiederwahl hängt hauptsächlich von Bevölkerung, Wirtschaft, Arbeitsplätzen und unpopulären Maßnahmen ab.
 - Auswertung zeigt Zielkonflikte statt einer pauschalen Bewertung oder der „besten Gruppe“.
 
 ## Decisions
 
-- Das Klimaziel 2050 ist eine Vorgabe des Unterrichtsspiels und wird als Spielziel bezeichnet, nicht als Aussage über das tatsächliche deutsche Klimaschutzgesetz.
+- Das Spiel nennt keine Jahreszahl für das Klimaziel und ergänzt keine Erklärungen zu Klimaschutzgesetzen oder Klimaabkommen.
 - Spielpunkte sind ein vereinfachtes Unterrichtsmodell und keine realen Wirkungsprognosen.
 - Raumzustand wird serverseitig gespeichert und jede Änderung innerhalb einer gesperrten Datenbanktransaktion verarbeitet, damit gleichzeitige Reaktionen keine Daten verlieren.
 - Anonyme, raumbezogene Browserzugänge reichen für diesen ausdrücklich accountfreien Unterrichtsablauf. Zugangswerte werden nur gehasht gespeichert und niemals in Spielantworten ausgegeben.

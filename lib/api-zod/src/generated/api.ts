@@ -107,8 +107,15 @@ export const CreateRoomResponse = zod.object({
 })
 
 
+export const getRoomPathCodeMin = 6;
+export const getRoomPathCodeMax = 6;
+
+
+export const getRoomPathCodeRegExp = new RegExp('^[A-HJ-NP-Z2-9]{6}$');
+
+
 export const GetRoomParams = zod.object({
-  "code": zod.coerce.string()
+  "code": zod.coerce.string().min(getRoomPathCodeMin).max(getRoomPathCodeMax).regex(getRoomPathCodeRegExp)
 })
 
 export const GetRoomResponse = zod.object({
@@ -169,8 +176,15 @@ export const GetRoomResponse = zod.object({
 })
 
 
+export const joinRoomPathCodeMin = 6;
+export const joinRoomPathCodeMax = 6;
+
+
+export const joinRoomPathCodeRegExp = new RegExp('^[A-HJ-NP-Z2-9]{6}$');
+
+
 export const JoinRoomParams = zod.object({
-  "code": zod.coerce.string()
+  "code": zod.coerce.string().min(joinRoomPathCodeMin).max(joinRoomPathCodeMax).regex(joinRoomPathCodeRegExp)
 })
 
 export const joinRoomBodyNameMax = 30;
@@ -239,8 +253,15 @@ export const JoinRoomResponse = zod.object({
 })
 
 
+export const controlRoomPathCodeMin = 6;
+export const controlRoomPathCodeMax = 6;
+
+
+export const controlRoomPathCodeRegExp = new RegExp('^[A-HJ-NP-Z2-9]{6}$');
+
+
 export const ControlRoomParams = zod.object({
-  "code": zod.coerce.string()
+  "code": zod.coerce.string().min(controlRoomPathCodeMin).max(controlRoomPathCodeMax).regex(controlRoomPathCodeRegExp)
 })
 
 export const ControlRoomBody = zod.object({
@@ -306,8 +327,15 @@ export const ControlRoomResponse = zod.object({
 })
 
 
+export const playTurnPathCodeMin = 6;
+export const playTurnPathCodeMax = 6;
+
+
+export const playTurnPathCodeRegExp = new RegExp('^[A-HJ-NP-Z2-9]{6}$');
+
+
 export const PlayTurnParams = zod.object({
-  "code": zod.coerce.string()
+  "code": zod.coerce.string().min(playTurnPathCodeMin).max(playTurnPathCodeMax).regex(playTurnPathCodeRegExp)
 })
 
 export const PlayTurnBody = zod.object({
@@ -320,6 +348,79 @@ export const PlayTurnBody = zod.object({
 })
 
 export const PlayTurnResponse = zod.object({
+  "code": zod.string(),
+  "status": zod.enum(['lobby', 'grouped', 'active', 'results', 'ended']),
+  "passage": zod.number().int(),
+  "players": zod.array(zod.object({
+  "id": zod.string(),
+  "name": zod.string(),
+  "role": zod.union([zod.literal('state'),zod.literal('business'),zod.literal('citizen'),zod.literal(null)]).nullable(),
+  "groupId": zod.string().nullable(),
+  "ready": zod.boolean(),
+  "perspective": zod.string()
+})),
+  "groups": zod.array(zod.object({
+  "id": zod.string(),
+  "number": zod.number().int(),
+  "playerIds": zod.array(zod.string()),
+  "round": zod.number().int(),
+  "phase": zod.enum(['role', 'decision', 'reaction', 'effects', 'finished']),
+  "meters": zod.object({
+  "climate": zod.number().int(),
+  "population": zod.number().int(),
+  "economy": zod.number().int(),
+  "treasury": zod.number().int(),
+  "reelection": zod.number().int()
+}),
+  "measureId": zod.string().nullable(),
+  "reactions": zod.array(zod.object({
+  "playerId": zod.string(),
+  "stance": zod.enum(['support', 'accept', 'oppose']),
+  "reason": zod.string()
+})),
+  "history": zod.array(zod.object({
+  "round": zod.number().int(),
+  "measureId": zod.string(),
+  "reactions": zod.array(zod.object({
+  "playerId": zod.string(),
+  "stance": zod.enum(['support', 'accept', 'oppose']),
+  "reason": zod.string()
+})),
+  "meters": zod.object({
+  "climate": zod.number().int(),
+  "population": zod.number().int(),
+  "economy": zod.number().int(),
+  "treasury": zod.number().int(),
+  "reelection": zod.number().int()
+}),
+  "explanations": zod.array(zod.string())
+})),
+  "summary": zod.string(),
+  "climateReached": zod.boolean()
+})),
+  "viewerRole": zod.enum(['teacher', 'student']),
+  "playerId": zod.string().nullable(),
+  "allFinished": zod.boolean(),
+  "createdAt": zod.string()
+})
+
+
+/**
+ * @summary Lehrkraft entfernt eine Person ausschließlich im Warteraum
+ */
+export const removeParticipantPathCodeMin = 6;
+export const removeParticipantPathCodeMax = 6;
+
+
+export const removeParticipantPathCodeRegExp = new RegExp('^[A-HJ-NP-Z2-9]{6}$');
+
+
+export const RemoveParticipantParams = zod.object({
+  "code": zod.coerce.string().min(removeParticipantPathCodeMin).max(removeParticipantPathCodeMax).regex(removeParticipantPathCodeRegExp),
+  "playerId": zod.coerce.string()
+})
+
+export const RemoveParticipantResponse = zod.object({
   "code": zod.string(),
   "status": zod.enum(['lobby', 'grouped', 'active', 'results', 'ended']),
   "passage": zod.number().int(),

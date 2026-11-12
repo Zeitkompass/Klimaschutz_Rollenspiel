@@ -37,7 +37,7 @@ paths:
               schema: { $ref: "#/components/schemas/RoomView" }
   /rooms/{code}:
     parameters:
-      - { name: code, in: path, required: true, schema: { type: string } }
+      - { $ref: "#/components/parameters/RoomCode" }
     get:
       operationId: getRoom
       responses:
@@ -48,7 +48,7 @@ paths:
               schema: { $ref: "#/components/schemas/RoomView" }
   /rooms/{code}/join:
     parameters:
-      - { name: code, in: path, required: true, schema: { type: string } }
+      - { $ref: "#/components/parameters/RoomCode" }
     post:
       operationId: joinRoom
       requestBody:
@@ -64,7 +64,7 @@ paths:
               schema: { $ref: "#/components/schemas/RoomView" }
   /rooms/{code}/control:
     parameters:
-      - { name: code, in: path, required: true, schema: { type: string } }
+      - { $ref: "#/components/parameters/RoomCode" }
     post:
       operationId: controlRoom
       requestBody:
@@ -80,7 +80,7 @@ paths:
               schema: { $ref: "#/components/schemas/RoomView" }
   /rooms/{code}/play:
     parameters:
-      - { name: code, in: path, required: true, schema: { type: string } }
+      - { $ref: "#/components/parameters/RoomCode" }
     post:
       operationId: playTurn
       requestBody:
@@ -94,7 +94,30 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/RoomView" }
+  /rooms/{code}/players/{playerId}:
+    parameters:
+      - { $ref: "#/components/parameters/RoomCode" }
+      - { name: playerId, in: path, required: true, schema: { type: string } }
+    delete:
+      operationId: removeParticipant
+      summary: Lehrkraft entfernt eine Person ausschließlich im Warteraum
+      responses:
+        "200":
+          description: Aktualisierter Warteraum
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RoomView" }
 components:
+  parameters:
+    RoomCode:
+      name: code
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 6
+        maxLength: 6
+        pattern: "^[A-HJ-NP-Z2-9]{6}$"
   schemas:
     HealthStatus:
       type: object

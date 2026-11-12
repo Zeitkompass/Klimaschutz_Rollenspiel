@@ -6,11 +6,13 @@ import {
   useGetRoom,
   useGetGame,
   useControlRoom,
+  useRemoveParticipant,
   getGetRoomQueryKey,
   type RoomView,
   type RoomControlAction,
+  type Participant,
 } from "@workspace/api-client-react";
-import { Check, Flag, Home, Play, Repeat, Shuffle, Users, Lock, AlertTriangle } from "lucide-react";
+import { Check, Flag, Home, Play, Repeat, Shuffle, Users, Lock, AlertTriangle, X } from "lucide-react";
 import { BigButton, CenterCard, ErrorNote, Logo, MeterStrip, Skeleton } from "@/components/kit";
 import { GroupResult, TakeAway } from "@/components/result";
 import { BASE, PHASE_LABEL, ROLE_META, ROUND_ICONS, errorStatus, errorText, usePageTitle } from "@/lib/game";
@@ -21,6 +23,20 @@ export default function TeacherPage() {
   const room = useGetRoom(code, { query: { queryKey: getGetRoomQueryKey(code), refetchInterval: 1500, retry: false } });
   const qc = useQueryClient();
   const control = useControlRoom();
+  const remove = useRemoveParticipant();
+
+  const removePlayer = (player: Participant) => {
+    if (!window.confirm(`${player.name} wirklich entfernen?`)) return;
+    remove.mutate(
+      { code, playerId: player.id },
+      {
+        onSuccess: (data) => {
+          qc.setQueryData(getGetRoomQueryKey(code), data);
+          qc.invalidateQueries({ queryKey: getGetRoomQueryKey(code) });
+        },
+      },
+    );
+  };
 
   const act = (action: RoomControlAction, r: RoomView) =>
     control.mutate(
@@ -65,7 +81,7 @@ export default function TeacherPage() {
       </CenterCard>
     );
 
-  const err = control.isError ? errorText(control.error) : "";
+  const err = remove.isError ? errorText(remove.error) : control.isError ? errorText(control.error) : "";
 
   return (
     <div className="min-h-[100dvh] pb-16">
@@ -78,7 +94,7 @@ export default function TeacherPage() {
       </header>
       <main className="mx-auto grid max-w-6xl gap-6 px-6 pt-6">
         <ErrorNote error={err} />
-        {r.status === "lobby" ? <Lobby r={r} onGroup={() => act("group", r)} pending={control.isPending} /> : null}
+        {r.status === "lobby" ? <Lobby r={r} onGroup={() => act("group", r)} onRemove={removePlayer} pending={control.isPending || remove.isPending} /> : null}
         {r.status === "grouped" ? <Grouped r={r} onStart={() => act("start", r)} pending={control.isPending} /> : null}
         {r.status === "active" ? <Live r={r} /> : null}
         {r.status === "results" || r.status === "ended" ? (
@@ -93,7 +109,7 @@ function canGroup(n: number) {
   return n === 3 || n === 4 || n >= 6;
 }
 
-function Lobby({ r, onGroup, pending }: { r: RoomView; onGroup: () => void; pending: boolean }) {
+function Lobby({ r, onGroup, onRemove, pending }: { r: RoomView; onGroup: () => void; onRemove: (player: Participant) => void; pending: boolean }) {
   const n = r.players.length;
   const url = `${window.location.origin}${BASE}/beitreten?code=${r.code}`;
   return (
@@ -126,10 +142,21 @@ function Lobby({ r, onGroup, pending }: { r: RoomView; onGroup: () => void; pend
                   layout
                   initial={{ opacity: 0, scale: 0.7 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="rounded-2xl bg-secondary px-4 py-2.5 text-lg font-bold"
+                  className="inline-flex items-center gap-2 rounded-2xl bg-secondary pl-4 pr-1 text-lg font-bold"
                   data-testid={`text-player-${p.id}`}
                 >
                   {p.name}
+                  <button
+                    type="button"
+                    onClick={() => onRemove(p)}
+                    disabled={pending}
+                    aria-label={`${p.name} entfernen`}
+                    title="Entfernen"
+                    data-testid={`button-remove-${p.id}`}
+                    className="grid h-11 w-11 place-items-center rounded-xl text-muted-foreground hover:bg-destructive/10 hover:text-destructive focus-visible:outline-2 focus-visible:outline-primary disabled:opacity-40"
+                  >
+                    <X className="h-5 w-5" aria-hidden="true" />
+                  </button>
                 </motion.span>
               ))}
             </AnimatePresence>

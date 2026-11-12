@@ -1,5 +1,5 @@
 import { randomInt, randomUUID } from "node:crypto";
-import type { GameGroup, Participant, Role, RoomView, TurnInput, RoomControl } from "@workspace/api-zod";
+import type { GameGroup, Participant, Reaction, Role, RoomView, TurnInput, RoomControl } from "@workspace/api-zod";
 import { INITIAL_METERS, catalog, impacts } from "./catalog";
 
 export class GameError extends Error {
@@ -22,6 +22,12 @@ const ensure: (condition: unknown, message: string, status?: number) => asserts 
 const clamp = (value: number) => Math.max(0, Math.min(100, Math.round(value)));
 export const allFinished = (room: RoomState) =>
   room.groups.length > 0 && room.groups.every((g) => g.phase === "finished");
+
+export function removeParticipant(room: RoomState, playerId: string) {
+  ensure(room.status === "lobby", "Nach der Gruppenbildung kann niemand mehr entfernt werden.");
+  ensure(room.players.some((p) => p.id === playerId), "Diese Person ist nicht mehr im Warteraum.", 404);
+  room.players = room.players.filter((p) => p.id !== playerId);
+}
 
 export function publicRoom(room: RoomState, identity: { teacher: boolean; playerId: string | null }): RoomView {
   const groupId = room.players.find((p) => p.id === identity.playerId)?.groupId;
@@ -133,6 +139,14 @@ export function control(room: RoomState, input: RoomControl) {
   }
 }
 
+export function climateReactionDelta(citizens: readonly Reaction["stance"][], business: Reaction["stance"]) {
+  const contribution = (stance: Reaction["stance"]) => stance === "support" ? 2 : stance === "oppose" ? -2 : 0;
+  // The two citizens in a four-person group share one contribution, so both
+  // group sizes have the same ±4 limit and the state's effect stays dominant.
+  const citizenDelta = citizens.reduce((sum, stance) => sum + contribution(stance), 0) / citizens.length;
+  return Math.round(citizenDelta + contribution(business));
+}
+
 function resolveEffects(room: RoomState, group: PrivateGroup) {
   const change = impacts[group.measureId!]!;
   const citizens = room.players.filter((p) => p.groupId === group.id && p.role === "citizen");
@@ -141,10 +155,14 @@ function resolveEffects(room: RoomState, group: PrivateGroup) {
   const publicMood = citizenReactions.reduce((sum, r) => sum + sentiment(r.stance), 0) / citizens.length;
   const business = group.reactions.find((r) => room.players.find((p) => p.id === r.playerId)?.role === "business")!;
   const companyMood = sentiment(business.stance);
+  const citizenStances = citizenReactions.map((r) => r.stance);
+  const climateAdjustment = climateReactionDelta(citizenStances, business.stance);
+  const baselineClimate = clamp(group.meters.climate + change.delta.climate);
+  const climate = clamp(group.meters.climate + change.delta.climate + climateAdjustment);
   const rawTreasury = group.meters.treasury + change.delta.treasury;
   const overspend = rawTreasury < 0 ? Math.min(20, Math.abs(rawTreasury)) : 0;
   group.meters = {
-    climate: clamp(group.meters.climate + change.delta.climate),
+    climate,
     population: clamp(group.meters.population + change.delta.population + publicMood - overspend / 2),
     economy: clamp(group.meters.economy + change.delta.economy + companyMood - overspend / 2),
     treasury: clamp(rawTreasury),
@@ -158,6 +176,19 @@ function resolveEffects(room: RoomState, group: PrivateGroup) {
     - (group.meters.treasury < 20 ? 8 : 0) - (overspend > 0 ? 8 : 0),
   );
   const explanations = [...change.explanations];
+  if (climate !== baselineClimate) {
+    const direction = Math.sign(climateAdjustment);
+    const stanceValue = (stance: Reaction["stance"]) => stance === "support" ? 1 : stance === "oppose" ? -1 : 0;
+    const citizenValue = citizenStances.reduce((sum, stance) => sum + stanceValue(stance), 0);
+    const citizenAligned = Math.sign(citizenValue) === direction;
+    const businessAligned = stanceValue(business.stance) === direction;
+    const actors = citizenAligned && businessAligned ? "Bürger und Unternehmen" : citizenAligned ? "Bürger" : "Unternehmen";
+    // Only explain a climate difference if it was actually visible after
+    // clamping at 0/100. Keep the existing three-explanation limit.
+    explanations[0] += climateAdjustment > 0
+      ? ` ${actors} unterstützen die Maßnahme. Dadurch wirkt sie etwas stärker.`
+      : ` ${actors} lehnen die Maßnahme ab. Dadurch wirkt sie etwas schwächer.`;
+  }
   if (overspend > 0) {
     explanations[2] = "Die Staatskasse reicht nicht aus. Das belastet Wirtschaft und Wiederwahl zusätzlich.";
   } else if (publicMood < 0 && companyMood < 0) {

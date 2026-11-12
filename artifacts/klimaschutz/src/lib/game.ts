@@ -20,6 +20,9 @@ import type { Meters } from "@workspace/api-client-react";
 
 export type MeterKey = keyof Meters;
 
+export const normalizeRoomCode = (value: string) => value.toUpperCase().replace(/\s/g, "");
+export const isValidRoomCode = (value: string) => /^[A-HJ-NP-Z2-9]{6}$/.test(value);
+
 export const METERS: { key: MeterKey; label: string; icon: LucideIcon; color: string }[] = [
   { key: "climate", label: "Klimaziel", icon: ThermometerSun, color: "hsl(var(--chart-1))" },
   { key: "population", label: "Bevölkerung", icon: Users, color: "hsl(var(--chart-2))" },

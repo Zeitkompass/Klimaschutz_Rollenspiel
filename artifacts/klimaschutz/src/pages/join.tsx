@@ -5,7 +5,7 @@ import { ArrowLeft, ArrowRight, Hash, User } from "lucide-react";
 import { useJoinRoom, getGetRoomQueryKey } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { BigButton, ErrorNote, Logo } from "@/components/kit";
-import { errorText, getStudentRoom, rememberStudentRoom, usePageTitle } from "@/lib/game";
+import { errorText, getStudentRoom, rememberStudentRoom, usePageTitle, normalizeRoomCode, isValidRoomCode } from "@/lib/game";
 
 export default function JoinPage() {
   usePageTitle("Beitreten");
@@ -14,12 +14,12 @@ export default function JoinPage() {
   const qc = useQueryClient();
   const join = useJoinRoom();
   const pre = new URLSearchParams(search).get("code") ?? "";
-  const [code, setCode] = useState(pre.toUpperCase());
+  const [code, setCode] = useState(normalizeRoomCode(pre));
   const [name, setName] = useState(() => getStudentRoom()?.name ?? "");
 
-  const c = code.trim().toUpperCase();
+  const c = normalizeRoomCode(code);
   const n = name.trim();
-  const valid = c.length >= 3 && n.length >= 1 && n.length <= 30;
+  const valid = isValidRoomCode(c) && n.length >= 1 && n.length <= 30;
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
@@ -56,14 +56,18 @@ export default function JoinPage() {
           <span className="flex items-center gap-2 font-bold"><Hash className="h-4 w-4" /> Raum-Code</span>
           <input
             value={code}
-            onChange={(e) => setCode(e.target.value.toUpperCase().replace(/\s/g, ""))}
-            maxLength={10}
+            onChange={(e) => setCode(normalizeRoomCode(e.target.value))}
+            minLength={6}
+            maxLength={12}
+            pattern="[A-HJ-NP-Z2-9]{6}"
+            aria-describedby="room-code-hint"
             autoCapitalize="characters"
             autoComplete="off"
-            placeholder="z. B. K7QF"
+            placeholder="K7QF3M"
             className="h-20 rounded-2xl border-2 border-input bg-card px-5 text-center font-display text-4xl font-extrabold tracking-[0.3em] outline-none focus:border-primary"
             data-testid="input-code"
           />
+          <span id="room-code-hint" className="text-sm text-muted-foreground">Genau 6 Zeichen, ohne I, O, 0 oder 1.</span>
         </label>
         <label className="grid gap-2">
           <span className="flex items-center gap-2 font-bold"><User className="h-4 w-4" /> Dein Vorname</span>
