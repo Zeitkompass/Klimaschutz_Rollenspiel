@@ -1,0 +1,590 @@
+Erstelle eine einfache, übersichtliche Web-App für den Sozialwissenschaftsunterricht in Klasse 8. Die App soll ein kurzes Rollenspiel zum Thema Klimaschutz sein.
+
+WICHTIG:
+
+- Das Spiel muss sehr einfach verständlich sein.
+- Die Schülerinnen und Schüler haben kaum Vorwissen.
+- Wenig Text, große Buttons, klare Symbole.
+- Keine komplizierten Regeln.
+- Keine langen Erklärungen.
+- Keine unnötigen zusätzlichen Funktionen.
+- Das Spiel soll insgesamt nur 4 Runden haben.
+- Verwende einfache Alltagssprache. Fachbegriffe nur dann, wenn sie direkt erklärt werden.
+- Das Spiel soll auf iPads gut funktionieren.
+
+## 1. Grundidee
+
+Deutschland muss sein Klimaziel erreichen: Klimaneutralität bis 2050.
+
+Dafür müssen Staat, Unternehmen und Bürger CO₂ einsparen. Gleichzeitig entstehen aber Zielkonflikte:
+
+- Klimaschutz kostet Geld.
+- Bürger können durch höhere Preise oder neue Regeln belastet werden.
+- Arbeitsplätze können gefährdet sein.
+- Unternehmen müssen Geld investieren.
+- Der Staat kann nicht unbegrenzt alles bezahlen.
+- Unbeliebte Maßnahmen können die Wiederwahl der Regierung gefährden.
+
+Das Spiel soll zeigen:
+
+„Klimaschutz bedeutet nicht nur, möglichst viel CO₂ einzusparen. Politik muss auch überlegen, wer die Kosten trägt und welche Folgen Entscheidungen für Menschen, Arbeitsplätze und Wirtschaft haben.“
+
+## 2. Einstieg und Gruppenbildung
+
+Es gibt einen Lehrer-Master-Bildschirm.
+
+Der Lehrer startet eine neue Spielrunde.
+
+Auf dem Master-Bildschirm erscheint:
+
+- ein kurzer Raumcode
+- zusätzlich ein QR-Code
+
+Alle Schülerinnen und Schüler öffnen die Schüleransicht und treten über den Code bei.
+
+Sie geben nur ihren Namen ein. Kein Account und kein Passwort.
+
+Der Lehrer sieht live, welche Schülerinnen und Schüler beigetreten sind.
+
+Dann klickt der Lehrer auf:
+
+„Gruppen zufällig bilden“
+
+Die App erstellt automatisch Dreiergruppen und verteilt zufällig diese Rollen:
+
+- Staat
+- Unternehmen
+- Bürger
+
+Wenn die Schülerzahl nicht durch 3 teilbar ist:
+
+- Gruppen mit 4 Personen sind erlaubt.
+- In einer Vierergruppe gibt es zwei Bürgerrollen.
+- Vermeide Zweiergruppen möglichst.
+
+Der Lehrer sieht danach auf seinem Bildschirm alle Gruppen und Rollen.
+
+Beispiel:
+
+Gruppe 1
+Lea – Staat
+Amir – Unternehmen
+Finn – Bürger
+
+## 3. Rollen
+
+Die Rollenbeschreibung soll extrem kurz sein.
+
+### Staat
+
+„Erreiche das Klimaziel. Aber die Menschen sollen dich weiter wählen und die Staatskasse darf nicht leer werden.“
+
+### Unternehmen
+
+„Senke den CO₂-Ausstoß. Aber dein Unternehmen muss Geld verdienen und Arbeitsplätze erhalten.“
+
+### Bürger
+
+„Hilf beim Klimaschutz. Aber dein Leben muss bezahlbar bleiben und dein Arbeitsplatz soll sicher sein.“
+
+Bei Gruppen mit zwei Bürgern dürfen die beiden Bürger unterschiedliche Interessen bekommen.
+
+Beispiele:
+
+Bürger 1:
+„Du arbeitest in einer Fabrik. Dein Arbeitsplatz ist dir besonders wichtig.“
+
+Bürger 2:
+„Du möchtest mehr Klimaschutz, willst dir dein Leben aber weiterhin leisten können.“
+
+Diese Zusatzinformationen müssen sehr kurz bleiben.
+
+## 4. Barometer
+
+Während des gesamten Spiels sollen oben dauerhaft fünf gut sichtbare Anzeigen stehen:
+
+🌍 KLIMAZIEL
+Wie viel CO₂ wurde bereits eingespart?
+
+🙂 BEVÖLKERUNG
+Wie zufrieden sind die Menschen?
+
+📈 WIRTSCHAFT
+Wie gut läuft die Wirtschaft und wie sicher sind Arbeitsplätze?
+
+💰 STAATSKASSE
+Wie viel Geld kann der Staat noch ausgeben?
+
+🗳️ WIEDERWAHL
+Wie wahrscheinlich ist es, dass die Regierung wiedergewählt wird?
+
+WICHTIG:
+
+Die Wiederwahl soll nicht völlig unabhängig berechnet werden.
+
+Sie soll sich vor allem aus diesen Faktoren ergeben:
+
+- Zufriedenheit der Bevölkerung
+- wirtschaftliche Lage
+- Arbeitsplatzverluste
+- besonders unbeliebte Entscheidungen
+
+Die Kinder müssen diese Berechnung nicht sehen.
+
+Die Barometer sollen sehr visuell sein, z. B. als farbige Balken von 0 bis 100.
+
+## 5. Ablauf jeder Runde
+
+Jede Runde läuft immer gleich ab.
+
+### Schritt 1: Problem
+
+Zeige ein sehr kurzes Problem.
+
+Maximal 2–3 kurze Sätze.
+
+### Schritt 2: Entscheidung des Staates
+
+Der Staat bekommt drei Maßnahmen zur Auswahl.
+
+Jede Maßnahme besteht aus:
+
+- einem kurzen Titel
+- höchstens zwei erklärenden Sätzen
+- einer kleinen Warnung über mögliche Folgen
+
+Beispiele für Warnungen:
+
+„Teuer für den Staat“
+
+„Kann Arbeitsplätze gefährden“
+
+„Kann Bürger verärgern“
+
+Die genauen Auswirkungen auf die Barometer dürfen VOR der Entscheidung noch nicht sichtbar sein.
+
+### Schritt 3: Reaktion von Unternehmen und Bürgern
+
+Nachdem der Staat eine Maßnahme gewählt hat, sehen Bürger und Unternehmen die Entscheidung.
+
+Sie wählen:
+
+👍 Unterstützen
+
+😐 Akzeptieren
+
+👎 Dagegen
+
+Danach wählen sie einen kurzen Grund aus.
+
+Beispiele Bürger:
+
+- „Es wird für mich zu teuer.“
+- „Mein Arbeitsplatz könnte gefährdet sein.“
+- „Ich finde die Maßnahme sinnvoll.“
+- „Ich fühle mich zu stark eingeschränkt.“
+- „Es gibt eine gute Alternative.“
+
+Beispiele Unternehmen:
+
+- „Der Umbau ist zu teuer.“
+- „Arbeitsplätze könnten verloren gehen.“
+- „Wir bekommen genug Unterstützung.“
+- „Die Maßnahme ist machbar.“
+- „Wir brauchen mehr Zeit.“
+
+Keine langen Texteingaben.
+
+Optional darf es einen kleinen Button „Eigener Grund“ geben, aber er ist nicht notwendig.
+
+### Schritt 4: Folgen
+
+Danach berechnet die App die Auswirkungen.
+
+Jetzt bewegen sich die Barometer sichtbar.
+
+Zeige darunter maximal drei kurze Erklärungen.
+
+Beispiel:
+
+🌍 „Der CO₂-Ausstoß sinkt deutlich.“
+
+🙂 „Viele Menschen ärgern sich über höhere Preise.“
+
+💰 „Der Staat nimmt zusätzlich Geld ein.“
+
+Dann geht es direkt weiter zur nächsten Runde.
+
+## 6. Die vier Runden
+
+### RUNDE 1 – VERKEHR
+
+Problem:
+
+„Autos und Flugzeuge verursachen viel CO₂. Deutschland muss den CO₂-Ausstoß im Verkehr senken.“
+
+Maßnahme A:
+
+„Klimaschädliches Reisen wird teurer.“
+
+Fliegen und Autofahren mit hohem CO₂-Ausstoß kosten mehr.
+
+Warnung:
+„Kann Bürger verärgern.“
+
+Auswirkungen:
+
+- Klima: deutlich besser
+- Bevölkerung: schlechter
+- Staatskasse: besser
+- Wirtschaft: leicht schlechter oder neutral
+
+Maßnahme B:
+
+„Bus und Bahn werden günstiger und besser.“
+
+Der Staat bezahlt mehr Geld für Busse und Bahnen.
+
+Warnung:
+„Teuer für den Staat.“
+
+Auswirkungen:
+
+- Klima: deutlich besser
+- Bevölkerung: besser
+- Staatskasse: deutlich schlechter
+- Wirtschaft: neutral bis leicht besser
+
+Maßnahme C:
+
+„Kaum neue Regeln.“
+
+Die Menschen entscheiden selbst, wie sie reisen.
+
+Warnung:
+„Das Klimaziel wird schwieriger.“
+
+Auswirkungen:
+
+- Klima: kaum Verbesserung
+- Bevölkerung: besser
+- Wirtschaft: besser
+- Staatskasse: neutral
+
+### RUNDE 2 – KOHLE UND ARBEITSPLÄTZE
+
+Problem:
+
+„Kohlekraftwerke stoßen viel CO₂ aus. Gleichzeitig arbeiten viele Menschen direkt oder indirekt in der Kohleindustrie.“
+
+Maßnahme A:
+
+„Kohlekraftwerke schnell schließen.“
+
+Warnung:
+„Arbeitsplätze können verloren gehen.“
+
+Auswirkungen:
+
+- Klima: sehr starke Verbesserung
+- Wirtschaft: deutlich schlechter
+- Bevölkerung: deutlich schlechter
+- Staatskasse: neutral
+
+Maßnahme B:
+
+„Kohlekraftwerke schließen und neue Arbeitsplätze fördern.“
+
+Der Staat gibt Geld aus, damit in den betroffenen Regionen neue Arbeitsplätze entstehen.
+
+Warnung:
+„Sehr teuer für den Staat.“
+
+Auswirkungen:
+
+- Klima: sehr starke Verbesserung
+- Bevölkerung: ungefähr stabil
+- Wirtschaft: leicht schlechter
+- Staatskasse: sehr deutlich schlechter
+
+Maßnahme C:
+
+„Kohlekraftwerke erst später schließen.“
+
+Warnung:
+„Das Klimaziel wird schwieriger.“
+
+Auswirkungen:
+
+- Klima: schlechter
+- Wirtschaft: besser
+- Bevölkerung: besser
+- Staatskasse: neutral
+
+WICHTIG:
+Diese Runde soll besonders deutlich machen:
+
+Ein Bürger kann Klimaschutz grundsätzlich gut finden und trotzdem gegen eine konkrete Maßnahme sein, wenn dadurch sein Arbeitsplatz gefährdet ist.
+
+## RUNDE 3 – UNTERNEHMEN UND FABRIKEN
+
+Problem:
+
+„Viele Fabriken verbrauchen viel Energie und stoßen CO₂ aus. Klimafreundliche Technik kostet aber viel Geld.“
+
+Maßnahme A:
+
+„Unternehmen müssen schnell umbauen und selbst bezahlen.“
+
+Warnung:
+„Kann Unternehmen und Arbeitsplätze belasten.“
+
+Auswirkungen:
+
+- Klima: sehr starke Verbesserung
+- Wirtschaft: deutlich schlechter
+- Staatskasse: neutral
+- Bevölkerung: leicht schlechter
+
+Maßnahme B:
+
+„Der Staat bezahlt einen Teil des Umbaus.“
+
+Warnung:
+„Sehr teuer für den Staat.“
+
+Auswirkungen:
+
+- Klima: sehr starke Verbesserung
+- Wirtschaft: besser
+- Staatskasse: sehr deutlich schlechter
+- Bevölkerung: leicht besser
+
+Maßnahme C:
+
+„Unternehmen bekommen mehr Zeit.“
+
+Warnung:
+„Das Klimaziel wird schwieriger.“
+
+Auswirkungen:
+
+- Klima: leichte Verbesserung
+- Wirtschaft: besser
+- Staatskasse: neutral
+- Bevölkerung: neutral
+
+## RUNDE 4 – HEIZEN UND WOHNEN
+
+Problem:
+
+„Viele Häuser werden noch mit Gas oder Öl beheizt. Neue klimafreundlichere Heizungen können viel Geld kosten.“
+
+Maßnahme A:
+
+„Alte Heizungen müssen schnell ersetzt werden.“
+
+Warnung:
+„Kann für Bürger sehr teuer werden.“
+
+Auswirkungen:
+
+- Klima: sehr starke Verbesserung
+- Bevölkerung: deutlich schlechter
+- Staatskasse: neutral
+- Wirtschaft: leicht besser
+
+Maßnahme B:
+
+„Der Staat hilft beim Bezahlen.“
+
+Warnung:
+„Sehr teuer für den Staat.“
+
+Auswirkungen:
+
+- Klima: sehr starke Verbesserung
+- Bevölkerung: besser
+- Staatskasse: sehr deutlich schlechter
+- Wirtschaft: leicht besser
+
+Maßnahme C:
+
+„Der Austausch bleibt freiwillig.“
+
+Warnung:
+„Das Klimaziel wird schwieriger.“
+
+Auswirkungen:
+
+- Klima: leichte Verbesserung
+- Bevölkerung: besser
+- Staatskasse: neutral
+- Wirtschaft: neutral
+
+## 7. Staatskasse
+
+Der Staat darf nicht unbegrenzt Geld ausgeben.
+
+Startwert:
+100 Punkte.
+
+Teure Förderungen senken die Staatskasse deutlich.
+
+Wenn die Staatskasse sehr niedrig wird:
+
+- soll die Wiederwahl sinken
+- soll eine Warnung erscheinen:
+
+„Der Staat hat kaum noch Geld für weitere Maßnahmen.“
+
+Wenn die Staatskasse auf 0 fällt, soll das Spiel NICHT sofort enden.
+
+Weitere teure Maßnahmen sollen aber deutlich negative Folgen haben.
+
+Keine komplizierten Schuldenregeln.
+
+## 8. Reaktionen der Rollen
+
+Die Reaktionen von Bürgern und Unternehmen sollen die Folgen leicht verändern können.
+
+Beispiel:
+
+Wenn sehr viele Bürger eine Maßnahme ablehnen:
+
+- Bevölkerung sinkt etwas stärker
+- Wiederwahl sinkt
+
+Wenn Unternehmen stark dagegen sind:
+
+- Wirtschaft sinkt etwas stärker
+
+Die Reaktionen dürfen aber NICHT die eigentliche Klimawirkung einer Maßnahme vollständig verändern.
+
+Die Entscheidungen des Staates bleiben der wichtigste Faktor.
+
+## 9. Spielende
+
+Nach Runde 4 erscheint eine Auswertung.
+
+Zuerst:
+
+„Habt ihr das Klimaziel erreicht?“
+
+Dann die fünf Endwerte.
+
+Beispiel:
+
+🌍 Klimaziel: 92 %
+
+🙂 Bevölkerung: 48 %
+
+📈 Wirtschaft: 64 %
+
+💰 Staatskasse: 21 %
+
+🗳️ Wiederwahl: 43 %
+
+Danach keine einfache Bewertung wie „gut“ oder „schlecht“.
+
+Stattdessen eine kurze Auswertung.
+
+Beispiele:
+
+„Ihr habt das Klimaziel erreicht. Dafür habt ihr sehr viel Geld ausgegeben.“
+
+„Ihr habt das Klimaziel erreicht, aber viele Menschen sind unzufrieden.“
+
+„Die Wirtschaft läuft gut und die Bevölkerung ist zufrieden. Das Klimaziel wurde aber verfehlt.“
+
+„Ihr habt einen Mittelweg gefunden, aber das Klimaziel nur knapp erreicht.“
+
+Am Schluss steht groß:
+
+„Klimaschutz hat Folgen. Politik muss entscheiden, wer die Kosten trägt.“
+
+## 10. Lehrer-Master-Bildschirm
+
+Der Lehrer soll während des Spiels sehen:
+
+- alle Gruppen
+- aktuelle Runde jeder Gruppe
+- aktuelle Barometerwerte jeder Gruppe
+- ob Gruppen schon fertig sind
+
+Am Ende soll eine übersichtliche Vergleichsansicht erscheinen.
+
+Beispiel:
+
+Gruppe 1
+Klimaziel erreicht
+Bevölkerung niedrig
+Wirtschaft stabil
+Staatskasse fast leer
+
+Gruppe 2
+Klimaziel verfehlt
+Bevölkerung hoch
+Wirtschaft stark
+Staatskasse stabil
+
+Gruppe 3
+Klimaziel erreicht
+Bevölkerung mittel
+Wirtschaft mittel
+Staatskasse mittel
+
+Keine Rangliste und keine Punkte für „beste Gruppe“.
+
+Die Unterschiede sollen anschließend im Unterricht besprochen werden.
+
+## 11. Gestaltung
+
+Optik:
+
+- modern
+- klar
+- spielerisch, aber nicht kindlich
+- große Buttons
+- sehr wenig Text
+- deutliche Symbole
+- gut auf iPads bedienbar
+
+Die fünf Barometer sollen immer sichtbar bleiben.
+
+Der aktuelle Wert soll durch Animationen sichtbar verändert werden.
+
+Bei einer Verbesserung:
+Balken bewegt sich nach rechts.
+
+Bei einer Verschlechterung:
+Balken bewegt sich nach links.
+
+Keine langen Animationen.
+
+## 12. Ganz wichtig
+
+Bitte NICHT hinzufügen:
+
+- weitere Rollen
+- NGOs
+- zusätzliche Spielrunden
+- komplizierte Budgets
+- Aktien oder Börse
+- Zufallsereignisse
+- Quizfragen
+- lange Lesetexte
+- Erfahrungspunkte
+- Ranglisten
+- Avatare
+- umfangreiche Profile
+- Chatfunktionen
+- komplizierte Gesetzgebungsverfahren
+
+Das Spiel soll bewusst einfach bleiben.
+
+Der wichtigste Lernmoment soll sein:
+
+Eine Maßnahme kann sehr gut für das Klima sein und gleichzeitig Geld kosten, Arbeitsplätze gefährden oder Bürger unzufrieden machen.
+
+Es gibt deshalb nicht automatisch eine Lösung, bei der alle Interessen gleichzeitig erfüllt werden.

@@ -1,36 +1,247 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
-  version: 0.1.0
-  description: API specification
+  version: 1.0.0
+  description: Klimaschutz Rollenspiel
 servers:
   - url: /api
-    description: Base API path
-tags:
-  - name: health
-    description: Health operations
 paths:
   /healthz:
     get:
       operationId: healthCheck
-      tags: [health]
-      summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/HealthStatus"
+              schema: { $ref: "#/components/schemas/HealthStatus" }
+  /game:
+    get:
+      operationId: getGame
+      summary: Spielinhalte ohne versteckte Auswirkungen
+      responses:
+        "200":
+          description: Spielinhalte
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/GameCatalog" }
+  /rooms:
+    post:
+      operationId: createRoom
+      summary: Raum eröffnen und Lehrerzugang als Cookie speichern
+      responses:
+        "201":
+          description: Raum eröffnet
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RoomView" }
+  /rooms/{code}:
+    parameters:
+      - { name: code, in: path, required: true, schema: { type: string } }
+    get:
+      operationId: getRoom
+      responses:
+        "200":
+          description: Live-Spielzustand des eigenen Raumes
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RoomView" }
+  /rooms/{code}/join:
+    parameters:
+      - { name: code, in: path, required: true, schema: { type: string } }
+    post:
+      operationId: joinRoom
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ParticipantInput" }
+      responses:
+        "200":
+          description: Beigetreten
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RoomView" }
+  /rooms/{code}/control:
+    parameters:
+      - { name: code, in: path, required: true, schema: { type: string } }
+    post:
+      operationId: controlRoom
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RoomControl" }
+      responses:
+        "200":
+          description: Aktualisierter Raum
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RoomView" }
+  /rooms/{code}/play:
+    parameters:
+      - { name: code, in: path, required: true, schema: { type: string } }
+    post:
+      operationId: playTurn
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/TurnInput" }
+      responses:
+        "200":
+          description: Aktualisierter Spielzustand
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RoomView" }
 components:
   schemas:
     HealthStatus:
       type: object
+      required: [status]
       properties:
-        status:
-          type: string
-      required:
-        - status
-
+        status: { type: string }
+    Meters:
+      type: object
+      required: [climate, population, economy, treasury, reelection]
+      properties:
+        climate: { type: integer }
+        population: { type: integer }
+        economy: { type: integer }
+        treasury: { type: integer }
+        reelection: { type: integer }
+    Role:
+      type: string
+      enum: [state, business, citizen]
+    RoleInfo:
+      type: object
+      required: [id, title, description]
+      properties:
+        id: { $ref: "#/components/schemas/Role" }
+        title: { type: string }
+        description: { type: string }
+    Measure:
+      type: object
+      required: [id, title, description, warning]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        description: { type: string }
+        warning: { type: string }
+    GameRound:
+      type: object
+      required: [number, title, problem, measures]
+      properties:
+        number: { type: integer }
+        title: { type: string }
+        problem: { type: string }
+        measures:
+          type: array
+          items: { $ref: "#/components/schemas/Measure" }
+    GameCatalog:
+      type: object
+      required: [rounds, roles, citizenReasons, businessReasons, initialMeters, climateTarget]
+      properties:
+        rounds:
+          type: array
+          items: { $ref: "#/components/schemas/GameRound" }
+        roles:
+          type: array
+          items: { $ref: "#/components/schemas/RoleInfo" }
+        citizenReasons:
+          type: array
+          items: { type: string }
+        businessReasons:
+          type: array
+          items: { type: string }
+        initialMeters: { $ref: "#/components/schemas/Meters" }
+        climateTarget: { type: integer }
+    Participant:
+      type: object
+      required: [id, name, role, groupId, ready, perspective]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        role: { type: [string, "null"], enum: [state, business, citizen, null] }
+        groupId: { type: [string, "null"] }
+        ready: { type: boolean }
+        perspective: { type: string }
+    Reaction:
+      type: object
+      required: [playerId, stance, reason]
+      properties:
+        playerId: { type: string }
+        stance: { type: string, enum: [support, accept, oppose] }
+        reason: { type: string }
+    RoundResult:
+      type: object
+      required: [round, measureId, reactions, meters, explanations]
+      properties:
+        round: { type: integer }
+        measureId: { type: string }
+        reactions:
+          type: array
+          items: { $ref: "#/components/schemas/Reaction" }
+        meters: { $ref: "#/components/schemas/Meters" }
+        explanations:
+          type: array
+          items: { type: string }
+    GameGroup:
+      type: object
+      required: [id, number, playerIds, round, phase, meters, measureId, reactions, history, summary, climateReached]
+      properties:
+        id: { type: string }
+        number: { type: integer }
+        playerIds:
+          type: array
+          items: { type: string }
+        round: { type: integer }
+        phase: { type: string, enum: [role, decision, reaction, effects, finished] }
+        meters: { $ref: "#/components/schemas/Meters" }
+        measureId: { type: [string, "null"] }
+        reactions:
+          type: array
+          items: { $ref: "#/components/schemas/Reaction" }
+        history:
+          type: array
+          items: { $ref: "#/components/schemas/RoundResult" }
+        summary: { type: string }
+        climateReached: { type: boolean }
+    RoomView:
+      type: object
+      required: [code, status, passage, players, groups, viewerRole, playerId, allFinished, createdAt]
+      properties:
+        code: { type: string }
+        status: { type: string, enum: [lobby, grouped, active, results, ended] }
+        passage: { type: integer }
+        players:
+          type: array
+          items: { $ref: "#/components/schemas/Participant" }
+        groups:
+          type: array
+          items: { $ref: "#/components/schemas/GameGroup" }
+        viewerRole: { type: string, enum: [teacher, student] }
+        playerId: { type: [string, "null"] }
+        allFinished: { type: boolean }
+        createdAt: { type: string }
+    ParticipantInput:
+      type: object
+      required: [name]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 30 }
+    RoomControl:
+      type: object
+      required: [action, passage]
+      properties:
+        action: { type: string, enum: [group, start, rotate, end] }
+        passage: { type: integer }
+    TurnInput:
+      type: object
+      required: [action, passage, round]
+      properties:
+        action: { type: string, enum: [ready, decide, react, next] }
+        passage: { type: integer }
+        round: { type: integer }
+        measureId: { type: string }
+        stance: { type: string, enum: [support, accept, oppose] }
+        reason: { type: string }

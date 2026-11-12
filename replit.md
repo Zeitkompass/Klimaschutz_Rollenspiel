@@ -1,45 +1,52 @@
-# [Project name]
+# Klimaschutz – Das Rollenspiel
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+Eine deutschsprachige Live-Web-App für den Sozialwissenschaftsunterricht in Klasse 8. Staat, Unternehmen und Bürger treffen in vier kurzen Runden Klimaschutzentscheidungen.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
-- `pnpm run typecheck` — full typecheck across all packages
-- `pnpm run build` — typecheck + build all packages
-- `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
-- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
+- `pnpm --filter @workspace/api-server run dev` — gemeinsamer API-Server
+- `pnpm --filter @workspace/klimaschutz run dev` — Web-App
+- `pnpm run typecheck` — TypeScript-Prüfung
+- `pnpm --filter @workspace/api-spec run codegen` — API-Clients und Validierung generieren
+- `pnpm --filter @workspace/db run push` — Entwicklungsschema aktualisieren
+- Dienste über ihre verwalteten Workflows starten; diese setzen `PORT` und `BASE_PATH`.
 
-## Stack
+## Structure
 
-- pnpm workspaces, Node.js 24, TypeScript 5.9
-- API: Express 5
-- DB: PostgreSQL + Drizzle ORM
-- Validation: Zod (`zod/v4`), `drizzle-zod`
-- API codegen: Orval (from OpenAPI spec)
-- Build: esbuild (CJS bundle)
+- `artifacts/klimaschutz` — React-Oberfläche für Lehrkraft und Schüler
+- `artifacts/api-server/src/lib/game/catalog.ts` — Runden, Rollen, Gründe und versteckte Spielauswirkungen
+- `artifacts/api-server/src/lib/game/engine.ts` — Spielregeln, Gruppenbildung, Rollenwechsel und Auswertung
+- `artifacts/api-server/src/routes/game.ts` — Raumzugang und Spielaktionen
+- `lib/api-spec/openapi.yaml` — verbindlicher API-Vertrag
+- `lib/db/src/schema/climate-rooms.ts` — gespeicherte Spielräume
 
-## Where things live
+## Product constraints from the user
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- Wenig Vorwissen: einfache Alltagssprache, wenig Text, große Buttons und klare Symbole, gut auf iPads bedienbar.
+- Genau vier Runden: Verkehr; Kohle und Arbeitsplätze; Unternehmen und Fabriken; Heizen und Wohnen.
+- Keine zusätzlichen Rollen, Quizfragen, Zufallsereignisse, Ranglisten, Avatare, Profile oder Chatfunktionen.
+- Zugang für Schüler nur mit Raumcode und Name, ohne Account oder Passwort.
+- Die Gruppen werden nur zu Beginn zufällig gebildet und bleiben bei weiteren Durchgängen zusammen.
+- Nach der Auswertung von Runde 4 entscheidet die Lehrkraft zwischen „Spiel beenden“ und „Neue Runde mit Rollenwechsel“.
+- Bei Rollenwechsel verschiedene Perspektiven möglichst fair verteilen. Barometer und Entscheidungen vollständig zurücksetzen; keine erneute Regelerklärung, sondern kurze neue Rollenanzeige und erneut Runde 1.
+- Im Lehrer-Master ist „Durchgang 1“, „Durchgang 2“ usw. sichtbar.
+- Keine numerischen Auswirkungen vor einer Entscheidung zeigen.
+- Die Staatskasse startet bei 100. Eine leere Staatskasse beendet das Spiel nicht, weitere Ausgaben müssen aber negative Folgen haben.
+- Wiederwahl hängt hauptsächlich von Bevölkerung, Wirtschaft, Arbeitsplätzen und unpopulären Maßnahmen ab.
+- Auswertung zeigt Zielkonflikte statt einer pauschalen Bewertung oder der „besten Gruppe“.
 
-## Architecture decisions
+## Decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- Das Klimaziel 2050 ist eine Vorgabe des Unterrichtsspiels und wird als Spielziel bezeichnet, nicht als Aussage über das tatsächliche deutsche Klimaschutzgesetz.
+- Spielpunkte sind ein vereinfachtes Unterrichtsmodell und keine realen Wirkungsprognosen.
+- Raumzustand wird serverseitig gespeichert und jede Änderung innerhalb einer gesperrten Datenbanktransaktion verarbeitet, damit gleichzeitige Reaktionen keine Daten verlieren.
+- Anonyme, raumbezogene Browserzugänge reichen für diesen ausdrücklich accountfreien Unterrichtsablauf. Zugangswerte werden nur gehasht gespeichert und niemals in Spielantworten ausgegeben.
+- Spielräume und Browserzugänge gelten für 24 Stunden. Nur Vornamen bzw. eindeutige kurze Unterrichtsnamen verwenden.
+- Fünf Teilnehmende lassen sich nicht vollständig auf Dreier- und Vierergruppen aufteilen. In diesem Sonderfall auf eine sechste Person warten, statt eine Rolle fehlen zu lassen.
 
-## Product
+## API/code generation notes
 
-_Describe the high-level user-facing capabilities of this app once they exist._
-
-## User preferences
-
-_Populate as you build — explicit user instructions worth remembering across sessions._
-
-## Gotchas
-
-_Populate as you build — sharp edges, "always run X before Y" rules._
-
-## Pointers
-
-- See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details
+- Nach API-Vertragsänderungen immer Codegen ausführen.
+- `info.title` bleibt `Api`.
+- Der generierte React-Client verwendet React Query 5 und benötigt `dom.iterable` in seiner TypeScript-Konfiguration.
+- Spielinhalte aus der öffentlichen API enthalten keine versteckten Maßnahmen-Auswirkungen.
